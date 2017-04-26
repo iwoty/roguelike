@@ -36,7 +36,7 @@ def print_board(board):
 
 
 def insert_player(board, x, y):
-    board[x][y] = ('@')
+    board[y][x] = ('@')
     return board
 
 
@@ -56,7 +56,15 @@ def main():
         print_board(insert_player(create_board(width, height), x, y))
         key_input = getch()
         print(key_input)
-        if key_input == ("p"):
+        if key_input == ("w"):
+            y -= 1
+        elif key_input == ("a"):
+            x -= 1
+        elif key_input == ("s"):
+            y += 1
+        elif key_input == ("d"):
+            x += 1
+        elif key_input == ("p"):
             os.system('clear')
             exit()
 
