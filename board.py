@@ -6,15 +6,9 @@ def create_board(width, hight):
     board_list.append(board_list[0])
     return board_list
 
-def add_player(board_list)
-    board_list[hight]
-
 def print_board(board_list):
     for item in board_list:
         print("".join(item))
-
-
-
 
 
 def main():
