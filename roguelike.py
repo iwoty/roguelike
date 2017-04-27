@@ -20,6 +20,7 @@ def create_board(width=50, height=20):  # board with size
     for value in range(height - 2):
         board_list.append(list("X" + " " * (width - 2) + "X"))
     board_list.append(board_list[0])
+    board_list.append('Press P to exit')
     return board_list
 
 
@@ -57,15 +58,8 @@ def main():
     os.system('clear')
     width = 50
     height = 20
-    # width = int(input('Enter map width: '))
-    # height = int(input('Enter map height: '))
-    # position_x = list(range(1, width-1))
-    # position_y = list(range(1, height-1))
-    # x = random.choice(position_x)
-    # y = random.choice(position_y)
     x = 5
     y = 5
-
 
     while True:
         print_board(insert_player(create_board(width, height), x, y))
