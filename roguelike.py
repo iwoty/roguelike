@@ -15,23 +15,16 @@ def getch():    # WASD moving
 
 
 def create_board(width=50, height=20):  # board with size
-    board = []
-    for row in range(height):
-        board.append([])
-    for row in range(width):
-        board[0].append('X')     # first row
-        board[height-1].append('X')    # last row
-    for i in range(width):
-        for i in range(1, height-1):
-            board[i].append(' ')
-    for row in range(height):
-        board[row][0] = ('X')               # first column
-        board[row][width-1] = ('X')         # last column
-    return board
+    board_list = []
+    board_list.append(list("X") * width)
+    for value in range(height - 2):
+        board_list.append(list("X" + " " * (width - 2) + "X"))
+    board_list.append(board_list[0])
+    return board_list
 
 
-def print_board(board):
-    for row in board:
+def print_board(board_list_with_player):
+    for row in board_list_with_player:
         print("".join(row))
 
 
@@ -64,8 +57,15 @@ def main():
     os.system('clear')
     width = 50
     height = 20
+    # width = int(input('Enter map width: '))
+    # height = int(input('Enter map height: '))
+    # position_x = list(range(1, width-1))
+    # position_y = list(range(1, height-1))
+    # x = random.choice(position_x)
+    # y = random.choice(position_y)
     x = 5
     y = 5
+
 
     while True:
         print_board(insert_player(create_board(width, height), x, y))
