@@ -1,8 +1,8 @@
 import random
-import os   # for clearing
+import os   # for screen clearing
 
 
-def getch():
+def getch():    # WASD moving
     import sys, tty, termios
     fd = sys.stdin.fileno()
     old_settings = termios.tcgetattr(fd)
@@ -14,7 +14,7 @@ def getch():
     return ch
 
 
-def create_board(width=50, height=20):
+def create_board(width=50, height=20):  # board with size
     board = []
     for row in range(height):
         board.append([])
@@ -40,6 +40,11 @@ def insert_player(board, x, y):
     return board
 
 
+def border_touch(x, y, height, width):  # if touch border - exit
+    if x == 0 or x == width or y == 0 or y == height-2:
+        exit()
+
+
 def main():
     # width = int(input('Enter map width: '))
     # height = int(input('Enter map height: '))
@@ -58,15 +63,21 @@ def main():
         print(key_input)
         if key_input == ("w"):
             y -= 1
+            #border_touch()
         elif key_input == ("a"):
             x -= 1
+            #border_touch()
         elif key_input == ("s"):
             y += 1
+            #border_touch()
         elif key_input == ("d"):
             x += 1
+            #border_touch()
         elif key_input == ("p"):
             os.system('clear')
             exit()
+        border_touch(x, y, height, width)
+        os.system('clear')
 
 if __name__ == '__main__':
     main()
