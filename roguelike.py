@@ -92,13 +92,13 @@ def moving(key_input, x, y):
     return x, y, broadcast
 
 
-def highscore(time_start, player_name, level, npc_killed, life_left, board_width=100, board_height=30):  # board with size
+def highscore(time_start, player_name, level, npc_killed, life_left, board_width=111, board_height=30):  # board with size
     '''Highscore'''
     time_end = datetime.datetime.today()  # set stopwatch off
     gamedate = datetime.date.today()  # date of game
     player_time = (time_end - time_start).seconds  # how long did player play
-    points = int(player_time)
-    players_score = [make_it_short(i, 12) for i in [player_name, gamedate, level,
+    points = int(int(level) * int(npc_killed) * int(life_left) / int(player_time))
+    players_score = [make_it_short(i, 13) for i in [player_name, gamedate, level,
                                                     player_time, npc_killed, life_left, points]]
 
     with open('highscores.txt', 'a') as highscore_add:  # opens and adds result to highscore
@@ -117,8 +117,8 @@ def highscore(time_start, player_name, level, npc_killed, life_left, board_width
 
     board_list = []
     board_list.append(list("X") * board_width)
-    board_list.append("X                                         So far highscores:                                       X\n")
-    board_list.append("X  Soldier name |       Date      |  Max level     |  Time  |   NPC killed   |   final life    |  Points  X  ")
+    board_list.append("X                                           So far highscores:                                                X")
+    board_list.append("X Soldier name|     Date      |   Max level   |      Time     |   NPC killed  |  Final life   |   Points      X")
     board_list.append(highscore)
     board_list.append(board_list[0])
     return board_list
@@ -152,7 +152,7 @@ def print_ascii_arts(i):
 def main():
     player_name = input('Enter your name soldier: ')
     os.system('clear')
-    board_width = 100
+    board_width = 120
     board_height = 25
     player_position = [15, 15]
     life_points = 100  # number of lifes
