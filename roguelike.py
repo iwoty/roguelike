@@ -20,6 +20,7 @@ def getch():    # WASD moving
     return ch
 
 
+'''
 def create_board(board_width=100, board_height=30):  # board with size
     board_list = []
     board_list.append(list("X") * board_width)
@@ -29,15 +30,37 @@ def create_board(board_width=100, board_height=30):  # board with size
     board_list.append('Press P to exit')
     board_list.append('Press H for Highscore')
     return board_list
+'''
 
 
-def print_board(board_list_with_player):
-    for row in board_list_with_player:
+def create_board(life_points, npc_killed, level, board_width=100, board_height=25):
+    board_list = []
+    for row in range(board_height):
+        board_list.append([])
+    for row in range(board_width):
+        board_list[0].append('X')     # first row
+        board_list[board_height-1].append('X')    # last row
+    for i in range(board_width):
+        for i in range (1,board_height-1):
+            board_list[i].append(' ')
+    for row in range(board_height):
+        board_list[row][0] = ('X')               # first column
+        board_list[row][board_width-1] = ('X')         # last column
+    board_list.append(['Life: ', str(life_points)])
+    board_list.append(['Enemies killed: ', str(npc_killed)])
+    board_list.append(['Level: ', str(level)])
+    board_list.append('Press P to exit')
+    board_list.append('Press H for Highscore')
+    return board_list
+
+
+def print_board(board_list):
+    for row in board_list:
         print("".join(row))
 
 
 def insert_player(board, x, y):
-    board[y][x] = ('@')
+    board[y][x] = (font_red + '@' + font_normal)
     return board
 
 
@@ -69,13 +92,13 @@ def moving(key_input, x, y):
     return x, y, broadcast
 
 
-def highscore(time_start, player_name, max_level, npc_killed, life_left, board_width=100, board_height=30):  # board with size
+def highscore(time_start, player_name, level, npc_killed, life_left, board_width=100, board_height=30):  # board with size
     '''Highscore'''
     time_end = datetime.datetime.today()  # set stopwatch off
     gamedate = datetime.date.today()  # date of game
     player_time = (time_end - time_start).seconds  # how long did player play
     points = int(player_time)
-    players_score = [make_it_short(i, 15) for i in [player_name, gamedate, max_level,
+    players_score = [make_it_short(i, 12) for i in [player_name, gamedate, level,
                                                     player_time, npc_killed, life_left, points]]
 
     with open('highscores.txt', 'a') as highscore_add:  # opens and adds result to highscore
@@ -95,9 +118,8 @@ def highscore(time_start, player_name, max_level, npc_killed, life_left, board_w
     board_list = []
     board_list.append(list("X") * board_width)
     board_list.append("X                                         So far highscores:                                       X\n")
-    board_list.append("X   Soldier name  |  Date  |  Max level     |  Time  |   NPC killed   |   final life    |  Points  X  ")
-    for i in range(0, 10):
-        board_list.append(highscore[i])
+    board_list.append("X  Soldier name |       Date      |  Max level     |  Time  |   NPC killed   |   final life    |  Points  X  ")
+    board_list.append(highscore)
     board_list.append(board_list[0])
     return board_list
 
@@ -112,21 +134,35 @@ def make_it_short(word, length):
         return str(word)
 
 
+def print_ascii_arts(i):
+    '''Create list with ASCII arts, print with life_points'''
+    ascii_art_list = []
+    try:
+        ascii_art_list.append(open('screens_start.txt', 'r'))  # open txt files with ASCII arts and create list with them
+        '''ascii_art_list.append(open('hangman4.txt', 'r'))
+        ascii_art_list.append(open('hangman3.txt', 'r'))
+        ascii_art_list.append(open('hangman2.txt', 'r'))
+        ascii_art_list.append(open('hangman1.txt', 'r'))'''
+    except FileNotFoundError:
+        print(font_red, 'Missing some of ASCII arts files :( Bye!', font_normal)
+        exit()
+    print(ascii_art_list[i].read())
+
+
 def main():
     player_name = input('Enter your name soldier: ')
     os.system('clear')
     board_width = 100
-    board_height = 30
-    player_position = [20, 20]
+    board_height = 25
+    player_position = [15, 15]
     life_points = 100  # number of lifes
     time_start = datetime.datetime.today()  # set stopwatch on
-
-    max_level = 10
+    level = 10
     npc_killed = 100
     life_left = 99
-
+    print_ascii_arts(0)
     while True:
-        print_board(insert_player(create_board(board_width, board_height), player_position[0], player_position[1]))
+        print_board(insert_player(create_board(life_points, npc_killed, level, board_width, board_height), player_position[0], player_position[1]))
         key_input = getch()
         player_position = moving(key_input, player_position[0], player_position[1])
         border_touch(player_position[0], player_position[1], board_height, board_width)
@@ -136,7 +172,7 @@ def main():
         if broadcast == "HIGH":
             break
 
-    print_board(highscore(time_start, player_name, max_level, npc_killed, life_left))
+    print_board(highscore(time_start, player_name, level, npc_killed, life_left))
 
 if __name__ == '__main__':
     main()
